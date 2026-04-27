@@ -1,0 +1,76 @@
+# HELP.md
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Environment Files (IMPORTANT - Add these) ###
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+### Frontend (React) - Inside resources ###
+src/main/resources/eserian-frontend/node_modules/
+src/main/resources/eserian-frontend/build/
+src/main/resources/eserian-frontend/.env
+src/main/resources/eserian-frontend/.env.local
+src/main/resources/eserian-frontend/package-lock.json
+src/main/resources/eserian-frontend/yarn.lock
+src/main/resources/eserian-frontend/.DS_Store
+
+### Logs ###
+*.log
+logs/
+*.log.gz
+
+### Docker ###
+docker-compose.override.yml
+*.pid
+
+### OS Generated Files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+### Application Specific ###
+application-local.properties
+application-dev.properties
+*.jar.original
