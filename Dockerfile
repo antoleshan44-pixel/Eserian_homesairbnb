@@ -1,49 +1,28 @@
-# Multi-stage build for Spring Boot + React together
+# Use Eclipse Temurin JDK 17 (official OpenJDK replacement)
+FROM eclipse-temurin:17-jdk-alpine
 
-# Stage 1: Build React frontend
-FROM node:18-alpine AS frontend-build
-
-WORKDIR /frontend
-
-# Copy frontend files
-COPY src/main/resources/eserian-frontend/package*.json ./
-RUN npm ci --only=production
-
-COPY src/main/resources/eserian-frontend/ ./
-RUN npm run build
-
-# Stage 2: Build Spring Boot backend
-FROM openjdk:17-jdk-slim AS backend-build
-
+# Set working directory
 WORKDIR /app
 
-# Copy Maven files
+# Copy Maven wrapper and pom.xml
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
+
+# Make mvnw executable
+RUN chmod +x mvnw
 
 # Download dependencies
 RUN ./mvnw dependency:go-offline -B
 
 # Copy source code
-COPY src src/
-
-# Copy built frontend to Spring Boot static directory
-COPY --from=frontend-build /frontend/build /app/src/main/resources/static
+COPY src src
 
 # Build the application
 RUN ./mvnw clean package -DskipTests
 
-# Stage 3: Run the application
-FROM openjdk:17-jdk-slim
-
-WORKDIR /app
-
-# Copy the built jar file
-COPY --from=backend-build /app/target/*.jar app.jar
-
-# Expose port
+# Expose port 8080
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "target/*.jar"]
