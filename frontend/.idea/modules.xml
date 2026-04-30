@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/eserian-frontend.iml" filepath="$PROJECT_DIR$/.idea/eserian-frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eserian-frontend/.idea/EserianHomes-Clean.iml" filepath="$PROJECT_DIR$/eserian-frontend/.idea/EserianHomes-Clean.iml" />
     </modules>
   </component>
 </project>
