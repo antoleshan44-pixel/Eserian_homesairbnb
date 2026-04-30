@@ -27,11 +27,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UserRepository userRepository;
 
-    // THIS IS NEW - Skip filter for public endpoints
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.equals("/api/auth/login") ||
+        return path.equals("/") ||
+                path.equals("/health") ||        // ← ADD THIS LINE
+                path.equals("/api/auth/login") ||
                 path.equals("/api/auth/register");
     }
 
@@ -49,7 +50,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 if (jwtUtil.validateToken(token)) {
                     String email = jwtUtil.extractEmail(token);
-                    String role = jwtUtil.extractRole(token); // ← GET ROLE FROM TOKEN
+                    String role = jwtUtil.extractRole(token);
 
                     // Default to USER if no role found
                     if (role == null) role = "USER";
@@ -69,4 +70,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }}
+    }
+}
