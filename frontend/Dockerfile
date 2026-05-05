@@ -1,5 +1,3 @@
-# Create frontend Dockerfile
-$dockerfileFrontend = @'
 # Build stage
 FROM node:18-alpine AS build
 
@@ -9,43 +7,25 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install
 
 # Copy source code
 COPY . .
 
-# Build the app
+# Build the React app
 RUN npm run build
 
-# Production stage
+# Production stage - use nginx
 FROM nginx:alpine
 
-# Copy built files
+# Copy built files from build stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Create nginx config
-RUN echo 'server { \
-    listen 80; \
-    server_name localhost; \
-    location / { \
-        root /usr/share/nginx/html; \
-        index index.html index.htm; \
-        try_files $uri $uri/ /index.html; \
-    } \
-    location /api { \
-        proxy_pass http://backend:8080; \
-        proxy_set_header Host $host; \
-        proxy_set_header X-Real-IP $remote_addr; \
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; \
-        proxy_set_header X-Forwarded-Proto $scheme; \
-    } \
-}' > /etc/nginx/conf.d/default.conf
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port
-EXPOSE 80
+# Expose port 3000
+EXPOSE 3000
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
-'@
-
-$dockerfileFrontend | Out-File -FilePath "frontend\Dockerfile" -Encoding UTF8
